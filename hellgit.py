@@ -1,0 +1,1 @@
+print 'hello %(name)s.' % {"name":"git"}
