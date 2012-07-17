@@ -1,3 +1,0 @@
-online doc   	http://docs.python.org/
-syntax		http://docs.python.org/reference/index.htmlhttp://docs.python.org/reference/index.html
-
