@@ -1,3 +1,3 @@
 git add .
-git commit -m 'commit by shell'
+git commit -m $1
 git push origin master

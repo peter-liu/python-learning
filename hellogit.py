@@ -1,1 +1,1 @@
-print 'hello %(name)s.' % {"name":"git"}
+print 'hello %(name)s.' % {"name":"github"}
