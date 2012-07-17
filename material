@@ -1,3 +1,7 @@
+PYTHON:
 DOC	http://docs.python.org/
 SYNTAX	http://docs.python.org/reference/index.html
 lIBRARY	http://docs.python.org/library/index.htmlhttp://docs.python.org/library/index.html
+
+GIT:
+OFFICIAL	http://www.kernel.org/pub/software/scm/git/doc
