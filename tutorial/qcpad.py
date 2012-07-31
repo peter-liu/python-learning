@@ -4,7 +4,12 @@ Created on 2012-7-29
 @author: Administrator
 '''
 import sys
+import ctypes
+from ctypes import wintypes
+import win32com
 from PyQt4 import QtGui,QtCore
+import hotkey
+import pyHook
 
 class Mtext(QtGui.QTextEdit):
     def mouseReleaseEvent(self,event):
@@ -18,8 +23,9 @@ class MTExample(QtGui.QMainWindow):
     def __init__(self):
         super(QtGui.QMainWindow,self).__init__()
         self.initUI()
-        
-        
+        QtGui.QShortcut("Ctrl+Alt+1",self,self.trayClick)
+       
+
     def closeEvent(self,event):
         
         if not self.trayIcon.realc:
@@ -47,7 +53,7 @@ class MTExample(QtGui.QMainWindow):
         self.center()
         #self.statusBar().showMessage('&Ready')
         self.setWindowIcon(QtGui.QIcon('app.png'))
-        self.setWindowTitle("Menu & Toolkit")
+        self.setWindowTitle("P-ad")
         ''' menu bar action'''
         exitAction = QtGui.QAction("&Exit",self)
         #exitAction.triggered.connect(QtGui.qApp.quit)
@@ -60,9 +66,13 @@ class MTExample(QtGui.QMainWindow):
         #menubar = self.menuBar()
         #fileMenu = menubar.addMenu('&File')
         #fileMenu.addAction(exitAction)
+        ''' about action'''
+        aboutaction = QtGui.QAction('&About',self)
+        aboutaction.triggered.connect(self.popabout)
+        
         ''' tool bar'''
-        #self.comm_bar = self.addToolBar("comm_bar")
-        #self.comm_bar.addAction(exitAction)
+        self.comm_bar = self.addToolBar("comm_bar")
+        self.comm_bar.addAction(aboutaction)
         
         ''''tray'''
         self.trayIcon = QtGui.QSystemTrayIcon(self)
@@ -83,12 +93,34 @@ class MTExample(QtGui.QMainWindow):
     def close_(self):
         QtCore.QCoreApplication.instance().quit();
 
-    def trayClick(self,reason):
-        if reason==QtGui.QSystemTrayIcon.DoubleClick: 
-            self.show()
-        elif reason==QtGui.QSystemTrayIcon.MiddleClick: 
-            self.show()
-          
+    def trayClick(self,reason='default'):
+        #if reason==QtGui.QSystemTrayIcon.DoubleClick: 
+        self.show()
+        self.showNormal()
+        #elif reason==QtGui.QSystemTrayIcon.MiddleClick: 
+            #self.show()
+    def quickd(self,mes):
+        self.show()
+        self.showNormal()
+    def popabout(self):
+        qd = QtGui.QDialog()
+        qd.setWindowTitle('about')
+        qd.setModal(True)
+        qd.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        qd.setGeometry(400,400,200,100)
+        lb = QtGui.QLabel(qd)
+        lb.setText("qcpad:<b>00</b>")
+        
+        sg = qd.frameGeometry()
+        scg =  QtGui.QDesktopWidget().screenGeometry().center()
+        sg.moveCenter(scg)
+        qd.move(sg.topLeft())
+        
+        qd.exec_()
+        
+        
+
+
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv);
     '''
@@ -100,5 +132,11 @@ if __name__ == '__main__':
     mte = MTExample()
     mte.show();
     mte.trayIcon.show();
+    
+    hk = hotkey.hotkeyer(mte.quickd,mte)
+    hm = pyHook.HookManager()
+    hm.KeyDown = hk.OnKeyboardEvent
+    hm.HookKeyboard()
+
     sys.exit(app.exec_());
     
